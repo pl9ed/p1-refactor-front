@@ -8,7 +8,7 @@ describe('EPortalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EPortalComponent ]
+    	declarations: [ EPortalComponent ]
     })
     .compileComponents();
   }));
