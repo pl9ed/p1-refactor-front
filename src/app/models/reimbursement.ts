@@ -2,15 +2,15 @@ import { Employee } from './employee'
 
 export class Reimbursement {
   submitter:Employee
-  imageUrl:String
+  imageUrl:string
   resolver:Employee
   amount:Number
-  description:String
-  category:String
+  description:string
+  category:string
   status:Number
 
-  constructor(submitter:Employee, imageUrl:String);
-  constructor(submitter:Employee,imageUrl:String,resolver?:Employee,amount?:Number,description?:String,category?:String,status?:Number) {
+  constructor(submitter:Employee, imageUrl:string);
+  constructor(submitter:Employee,imageUrl:string,resolver?:Employee,amount?:Number,description?:string,category?:string,status?:Number) {
     this.submitter = submitter
     this.imageUrl = imageUrl
     this.resolver = resolver
