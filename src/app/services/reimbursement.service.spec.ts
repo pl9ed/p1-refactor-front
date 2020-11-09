@@ -23,7 +23,7 @@ describe('ReimbursementService', () => {
 
   it('should make get requests for single reimbursements', () => {
     let id = 1;
-    service.getSingle(id);
+    let reimb = service.getSingle(id);
     http.expectOne(`${environment.API_URL}/reimbursement/${id}`);
   })
 });
