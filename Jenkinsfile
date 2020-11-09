@@ -13,7 +13,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                sh 'ng test'
+                sh 'ng test --no-watch --code-coverage'
             }
         }
         stage('Deploy') {
