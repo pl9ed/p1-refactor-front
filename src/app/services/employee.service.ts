@@ -11,16 +11,19 @@ export class EmployeeService {
 
   constructor(private http: HttpClient) {}
 
-  async login(username: string, password: string) {
+  async login(username: string, password: string): Promise<Employee> {
     let loginData = new FormData();
     loginData.append('username', username);
     loginData.append('password', password);
 
-    let user = await this.http
-      .post(
-        `${environment.API_URL}/login`, loginData
-      )
-      .toPromise();
-    sessionStorage.setItem('user', JSON.stringify(user));
+    try {
+      let user: Employee = await this.http
+        .post<Employee>(`${environment.API_URL}/login`, loginData)
+        .toPromise();
+      sessionStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 }
