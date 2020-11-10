@@ -21,6 +21,8 @@
               />
               <br />
               <button class="btn btn-primary" (click)="login()">Login</button>
+              <br>
+              <span id=invalidMessage *ngIf="invalidLogin" style="color:red">Wrong Username/Password!</span>
             </div>
         </div>
     </div>
