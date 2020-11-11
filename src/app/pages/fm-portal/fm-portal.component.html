@@ -1,1 +1,224 @@
-<p>fm-portal works!</p>
+<div class="container-fluid fixed-top">
+  <div class="row" style="background-color: lightskyblue">
+    <div class="col col-8 my-auto">
+      <div class="input-group-append">
+        <select
+          id="dropdown_selection"
+          class="custom-select col-3"
+          [(ngModel)]="searchCategory"
+        >
+          <option value="default" selected>Search by...</option>
+          <option value="id" class="dropdown-item">ID</option>
+          <option value="submitter_name" class="dropdown-item">
+            Submitter Name
+          </option>
+          <option value="submitter_username" class="dropdown-item">
+            Submitter Username
+          </option>
+          <option value="resolver_username" class="dropdown-item">
+            Resolver ID
+          </option>
+          <option value="description" class="dropdown-item">Description</option>
+        </select>
+        <input id="searchTerm" type="text" [(ngModel)]="searchTerm">
+
+        <div class="form-check form-check-inline" style="margin-left: 10px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkPending"
+            [(ngModel)]="showPending"
+          />
+          <label class="form-check-label" for="checkPending">Pending</label>
+        </div>
+        <div class="form-check form-check-inline" style="margin-left: 10px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkApproved"
+            [(ngModel)]="showApproved"
+          />
+          <label class="form-check-label" for="checkApproved">Approved</label>
+        </div>
+        <div class="form-check form-check-inline" style="margin-left: 10px">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="checkDenied"
+            [(ngModel)]="showDenied"
+          />
+          <label class="form-check-label" for="checkDenied">Denied</label>
+        </div>
+      </div>
+    </div>
+    <div class="col my-auto">
+      <button
+        class="btn btn-primary float-right"
+        id="logoutBtn"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div id="main" class="row justify-content-center">
+    <div class="col"></div>
+    <div class="col col-8">
+      <table class="table table-striped">
+        <tr>
+          <th>ID</th>
+          <th>Submit Date</th>
+          <th>Status</th>
+          <th>Submitter</th>
+          <th></th>
+        </tr>
+        <tr
+          *ngFor="
+            let row of this.reimbList
+              | reimbfilter: showApproved:showPending:showDenied:searchCategory:searchTerm;
+            let i = index
+          "
+        >
+          <td class="align-middle">{{ row.id }}</td>
+          <td class="align-middle">
+            {{ row.submitDate | date: "yyyy/MM/dd" }}
+          </td>
+          <td *ngIf="row.status == 0" style="color: black" class="align-middle">
+            PENDING
+          </td>
+          <td *ngIf="row.status > 0" style="color: green" class="align-middle">
+            APPROVED
+          </td>
+          <td *ngIf="row.status < 0" style="color: red" class="align-middle">
+            DENIED
+          </td>
+          <td class="align-middle">
+            {{ row.submitter.firstName }} {{ row.submitter.lastName }}
+          </td>
+          <td class="align-middle">
+            <button
+              class="btn btn-info"
+              (click)="loadModal(row)"
+              data-toggle="modal"
+              data-target="#reimbModal"
+            >
+              Info
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="col"></div>
+  </div>
+
+  <div
+    class="modal fade"
+    id="reimbModal"
+    *ngIf="reimbModalData"
+    tabindex="-1"
+    role="dialog"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-body mx-auto">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <table class="table">
+            <tr>
+              <th>ID</th>
+              <td>{{ this.reimbModalData.id }}</td>
+            </tr>
+            <tr>
+              <th>Submitter</th>
+              <td>
+                {{ this.reimbModalData.submitter.firstName }}
+                {{ this.reimbModalData.submitter.lastName }},
+                {{ this.reimbModalData.submitter.username }}
+              </td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td
+                *ngIf="this.reimbModalData.status == 0"
+                style="color: black"
+                class="align-middle"
+              >
+                PENDING
+              </td>
+              <td
+                *ngIf="this.reimbModalData.status > 0"
+                style="color: green"
+                class="align-middle"
+              >
+                APPROVED
+              </td>
+              <td
+                *ngIf="this.reimbModalData.status < 0"
+                style="color: red"
+                class="align-middle"
+              >
+                DENIED
+              </td>
+            </tr>
+            <tr>
+              <th>Submission Date</th>
+              <td>{{ this.reimbModalData.submitDate | date: "yyyy/MM/dd" }}</td>
+            </tr>
+            <tr>
+              <th>Category</th>
+              <td>{{ this.reimbModalData.category }}</td>
+            </tr>
+            <tr>
+              <th>Amount</th>
+              <td>{{ this.reimbModalData.amount | currency }}</td>
+            </tr>
+            <tr>
+              <th>Resolve Date</th>
+              <td *ngIf="this.reimbModalData.resolveDate >= 0; else na">
+                {{ this.reimbModalData.resolveDate | date: "yyyy/MM/dd" }}
+              </td>
+              <ng-template #na><td>n/a</td></ng-template>
+            </tr>
+            <tr>
+              <th>Resolver</th>
+              <td *ngIf="this.reimbModalData.resolver != null; else na"> {{this.reimbModalData.resolver.firstName}} {{this.reimbModalData.resolver.lastName}}, {{ this.reimbModalData.resolver.username}}</td>
+              <!-- <ng-template #na><td>n/a</td></ng-template> -->
+            </tr>
+            <th colspan="2">Description</th>
+            <tr>
+              <td class="text-break">{{ this.reimbModalData.description }}</td>
+            </tr>
+          </table>
+          <img class="img-fluid" [src]="this.reimbModalData.imageUrl" />
+        </div>
+        <div *ngIf="this.reimbModalData.status == 0" class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-success"
+            data-dismiss="modal"
+            (click)="approve(reimbModalData)"
+          >
+            Approve
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            data-dismiss="modal"
+            (click)="deny(reimbModalData)"
+          >
+            Deny
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
