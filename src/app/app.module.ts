@@ -7,9 +7,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { FmPortalComponent } from './pages/fm-portal/fm-portal.component';
 import { EPortalComponent } from './pages/e-portal/e-portal.component';
 import { UploadComponent } from './upload/upload.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms';
+import { ReimbfilterPipe } from './pipes/reimbfilter.pipe';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
     FmPortalComponent,
     EPortalComponent,
     UploadComponent,
-    NavbarComponent
+    ReimbfilterPipe
   ],
   imports: [
     BrowserModule,
